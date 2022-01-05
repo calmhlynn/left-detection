@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="01465f52-6708-4b7d-8600-05ab72381b8f" name="hanhwa_nano">
+        <fileTransfer accessType="SFTP" host="192.168.1.225" port="22" sshConfigId="0e81f5c1-47d0-4d77-bb71-a9c0c432683c" sshConfig="user@192.168.1.225:22 password">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
