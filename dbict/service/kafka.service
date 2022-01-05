@@ -1,0 +1,27 @@
+[Unit]
+
+Description=Apache Kafka Service
+
+Documentation=http://kafka.apache.org/documentation.html
+
+Requires=zookeeper.service
+
+
+
+[Service]
+
+Environment=PATH=/usr/local/java/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
+Type=simple
+
+ExecStart=/home/user/kafka_2.13-2.8.0/bin/kafka-server-start.sh /home/user/kafka_2.13-2.8.0/config/server.properties
+
+ExecStop=/home/user/kafka_2.13-2.8.0/bin/kafka-server-stop.sh
+
+Restart=always
+
+
+
+[Install]
+
+WantedBy=multi-user.target

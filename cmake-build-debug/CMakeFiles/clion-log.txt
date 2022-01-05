@@ -1,0 +1,223 @@
+"/Users/feus/Library/Application Support/JetBrains/Toolbox/apps/CLion/ch-0/213.5744.254/CLion.app/Contents/bin/cmake/mac/bin/cmake" -DCMAKE_BUILD_TYPE=Debug "-DCMAKE_MAKE_PROGRAM=/Users/feus/Library/Application Support/JetBrains/Toolbox/apps/CLion/ch-0/213.5744.254/CLion.app/Contents/bin/ninja/mac/ninja" -G Ninja /Users/feus/jetson-inference
+CMake Deprecation Warning at CMakeLists.txt:2 (cmake_minimum_required):
+  Compatibility with CMake < 2.8.12 will be removed from a future version of
+  CMake.
+
+  Update the VERSION argument <min> value or use a ...<max> suffix to tell
+  CMake that the project does not need compatibility with older versions.
+
+
+-- The C compiler identification is AppleClang 13.0.0.13000029
+-- The CXX compiler identification is AppleClang 13.0.0.13000029
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /Library/Developer/CommandLineTools/usr/bin/cc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /Library/Developer/CommandLineTools/usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+ 
+Note:  this project uses git submodules in the source tree.
+       if you haven't already, run the following command from
+       the project's root directory:
+ 
+           git submodule update --init
+
+
+-- Launching pre-build dependency installer script...
+-- Build interactive:  YES
+[Pre-build]  dependency installer script running...
+[Pre-build]  build root directory: /Users/feus/jetson-inference/cmake-build-debug
+[Pre-build]  build interactive:    YES
+[Pre-build]  build container:      NO
+ 
+sudo: a terminal is required to read the password; either use the -S option to read from standard input or configure an askpass helper
+sudo: a password is required
+sudo: a terminal is required to read the password; either use the -S option to read from standard input or configure an askpass helper
+sudo: a password is required
+sudo: a terminal is required to read the password; either use the -S option to read from standard input or configure an askpass helper
+sudo: a password is required
+sudo: a terminal is required to read the password; either use the -S option to read from standard input or configure an askpass helper
+sudo: a password is required
+sudo: a terminal is required to read the password; either use the -S option to read from standard input or configure an askpass helper
+sudo: a password is required
+sudo: a terminal is required to read the password; either use the -S option to read from standard input or configure an askpass helper
+sudo: a password is required
+[jetson-inference]  BUILD_INTERACTVE=YES
+./download-models.sh: line 614: dpkg-query: command not found
+[jetson-inference]  Checking for 'dialog' deb package...not installed
+[jetson-inference]  FOUND_DIALOG=
+./download-models.sh: line 757: dialog: command not found
+TERM environment variable not set.
+[jetson-inference]  Model selection status:  127
+[jetson-inference]  Model selection cancelled.
+ 
+[jetson-inference]  to run this tool again, use the following commands:
+ 
+    $ cd <jetson-inference>/tools
+    $ ./download-models.sh
+ 
+[jetson-inference]  BUILD_INTERACTVE=YES
+./install-pytorch.sh: line 174: dpkg-query: command not found
+[jetson-inference]  Checking for 'dialog' deb package...not installed
+[jetson-inference]  Missing 'dialog' deb package...installing 'dialog' package.
+sudo: a terminal is required to read the password; either use the -S option to read from standard input or configure an askpass helper
+sudo: a password is required
+./install-pytorch.sh: line 174: dpkg-query: command not found
+[jetson-inference]  Checking for 'dialog' deb package...not installed
+[jetson-inference]  Failed to install 'dialog' deb package.
+ 
+[jetson-inference]  errors encountered during installation, exiting with code 1
+[jetson-inference]  to run this tool again, use the following commands:
+ 
+    $ cd <jetson-inference>/build
+    $ ./install-pytorch.sh
+ 
+[Pre-build]  Finished CMakePreBuild script
+-- Finished installing dependencies
+-- using patched FindCUDA.cmake
+CUDA_TOOLKIT_ROOT_DIR not found or specified
+-- Could NOT find CUDA (missing: CUDA_TOOLKIT_ROOT_DIR CUDA_NVCC_EXECUTABLE CUDA_INCLUDE_DIRS CUDA_CUDART_LIBRARY) 
+-- CUDA version: 
+-- system arch:  arm64
+-- output path:  /Users/feus/jetson-inference/cmake-build-debug/arm64
+-- BUILD_EXPERIMENTAL disabled
+-- Copying /Users/feus/jetson-inference/c/detectNet.h
+-- Copying /Users/feus/jetson-inference/c/tensorConvert.h
+-- Copying /Users/feus/jetson-inference/c/tensorNet.h
+-- Copying /Users/feus/jetson-inference/calibration/randInt8Calibrator.h
+-- Could NOT find Doxygen (missing: DOXYGEN_EXECUTABLE) 
+CMake Deprecation Warning at utils/CMakeLists.txt:2 (cmake_minimum_required):
+  Compatibility with CMake < 2.8.12 will be removed from a future version of
+  CMake.
+
+  Update the VERSION argument <min> value or use a ...<max> suffix to tell
+  CMake that the project does not need compatibility with older versions.
+
+
+-- jetson-utils:  building as submodule, /Users/feus/jetson-inference
+-- Copying /Users/feus/jetson-inference/utils/URI.h
+-- Copying /Users/feus/jetson-inference/utils/XML.h
+-- Copying /Users/feus/jetson-inference/utils/alphanum.h
+-- Copying /Users/feus/jetson-inference/utils/camera/gstCamera.h
+-- Copying /Users/feus/jetson-inference/utils/camera/v4l2Camera.h
+-- Copying /Users/feus/jetson-inference/utils/codec/gstBufferManager.h
+-- Copying /Users/feus/jetson-inference/utils/codec/gstDecoder.h
+-- Copying /Users/feus/jetson-inference/utils/codec/gstEncoder.h
+-- Copying /Users/feus/jetson-inference/utils/codec/gstUtility.h
+-- Copying /Users/feus/jetson-inference/utils/codec/nvbuf_utils.h
+-- Copying /Users/feus/jetson-inference/utils/commandLine.h
+-- Copying /Users/feus/jetson-inference/utils/csvReader.h
+-- Copying /Users/feus/jetson-inference/utils/csvReader.hpp
+-- Copying /Users/feus/jetson-inference/utils/csvWriter.h
+-- Copying /Users/feus/jetson-inference/utils/csvWriter.hpp
+-- Copying /Users/feus/jetson-inference/utils/cuda/cudaAlphaBlend.cuh
+-- Copying /Users/feus/jetson-inference/utils/cuda/cudaBayer.h
+-- Copying /Users/feus/jetson-inference/utils/cuda/cudaColormap.h
+-- Copying /Users/feus/jetson-inference/utils/cuda/cudaColorspace.h
+-- Copying /Users/feus/jetson-inference/utils/cuda/cudaCrop.h
+-- Copying /Users/feus/jetson-inference/utils/cuda/cudaDraw.h
+-- Copying /Users/feus/jetson-inference/utils/cuda/cudaFilterMode.cuh
+-- Copying /Users/feus/jetson-inference/utils/cuda/cudaFilterMode.h
+-- Copying /Users/feus/jetson-inference/utils/cuda/cudaFont.h
+-- Copying /Users/feus/jetson-inference/utils/cuda/cudaGrayscale.h
+-- Copying /Users/feus/jetson-inference/utils/cuda/cudaMappedMemory.h
+-- Copying /Users/feus/jetson-inference/utils/cuda/cudaMath.h
+-- Copying /Users/feus/jetson-inference/utils/cuda/cudaNormalize.h
+-- Copying /Users/feus/jetson-inference/utils/cuda/cudaOverlay.h
+-- Copying /Users/feus/jetson-inference/utils/cuda/cudaPointCloud.h
+-- Copying /Users/feus/jetson-inference/utils/cuda/cudaRGB.h
+-- Copying /Users/feus/jetson-inference/utils/cuda/cudaResize.h
+-- Copying /Users/feus/jetson-inference/utils/cuda/cudaUtility.h
+-- Copying /Users/feus/jetson-inference/utils/cuda/cudaVector.h
+-- Copying /Users/feus/jetson-inference/utils/cuda/cudaWarp.h
+-- Copying /Users/feus/jetson-inference/utils/cuda/cudaYUV.h
+-- Copying /Users/feus/jetson-inference/utils/display/glBuffer.h
+-- Copying /Users/feus/jetson-inference/utils/display/glCamera.h
+-- Copying /Users/feus/jetson-inference/utils/display/glDisplay.h
+-- Copying /Users/feus/jetson-inference/utils/display/glEvents.h
+-- Copying /Users/feus/jetson-inference/utils/display/glTexture.h
+-- Copying /Users/feus/jetson-inference/utils/display/glUtility.h
+-- Copying /Users/feus/jetson-inference/utils/display/glWidget.h
+-- Copying /Users/feus/jetson-inference/utils/filesystem.h
+-- Copying /Users/feus/jetson-inference/utils/image/imageFormat.h
+-- Copying /Users/feus/jetson-inference/utils/image/imageFormat.inl
+-- Copying /Users/feus/jetson-inference/utils/image/imageIO.h
+-- Copying /Users/feus/jetson-inference/utils/image/imageLoader.h
+-- Copying /Users/feus/jetson-inference/utils/image/imageWriter.h
+-- Copying /Users/feus/jetson-inference/utils/image/loadImage.h
+-- Copying /Users/feus/jetson-inference/utils/input/devInput.h
+-- Copying /Users/feus/jetson-inference/utils/input/devJoystick.h
+-- Copying /Users/feus/jetson-inference/utils/input/devKeyboard.h
+-- Copying /Users/feus/jetson-inference/utils/json.hpp
+-- Copying /Users/feus/jetson-inference/utils/logging.h
+-- Copying /Users/feus/jetson-inference/utils/mat33.h
+-- Copying /Users/feus/jetson-inference/utils/network/Endian.h
+-- Copying /Users/feus/jetson-inference/utils/network/IPv4.h
+-- Copying /Users/feus/jetson-inference/utils/network/NetworkAdapter.h
+-- Copying /Users/feus/jetson-inference/utils/network/Socket.h
+-- Copying /Users/feus/jetson-inference/utils/pi.h
+-- Copying /Users/feus/jetson-inference/utils/rand.h
+-- Copying /Users/feus/jetson-inference/utils/threads/Event.h
+-- Copying /Users/feus/jetson-inference/utils/threads/Event.inl
+-- Copying /Users/feus/jetson-inference/utils/threads/Mutex.h
+-- Copying /Users/feus/jetson-inference/utils/threads/Mutex.inl
+-- Copying /Users/feus/jetson-inference/utils/threads/Process.h
+-- Copying /Users/feus/jetson-inference/utils/threads/RingBuffer.h
+-- Copying /Users/feus/jetson-inference/utils/threads/RingBuffer.inl
+-- Copying /Users/feus/jetson-inference/utils/threads/Thread.h
+-- Copying /Users/feus/jetson-inference/utils/timespec.h
+-- Copying /Users/feus/jetson-inference/utils/video/videoOptions.h
+-- Copying /Users/feus/jetson-inference/utils/video/videoOutput.h
+-- Copying /Users/feus/jetson-inference/utils/video/videoSource.h
+-- trying to build Python bindings for Python versions:  2.7;3.6;3.7
+-- detecting Python 2.7...
+-- found Python version:  2.7 (2.7.18)
+-- found Python include:  /Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/python2.7
+-- found Python library:  /usr/lib/libpython2.7.dylib
+-- CMake module path:  /Users/feus/jetson-inference/utils/cuda;/Users/feus/jetson-inference/utils/python/bindings
+-- NumPy ver. 1.8.0rc1 found (include: /System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/numpy/core/include)
+-- found NumPy version:  1.8.0rc1
+-- found NumPy include:  /System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/numpy/core/include
+-- detecting Python 3.6...
+-- found Python version:  3.6 (3.6.8)
+-- found Python include:  /Library/Frameworks/Python.framework/Versions/3.6/include/python3.6m
+-- found Python library:  /Library/Frameworks/Python.framework/Versions/3.6/lib/libpython3.6m.dylib
+-- CMake module path:  /Users/feus/jetson-inference/utils/cuda;/Users/feus/jetson-inference/utils/python/bindings
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+ModuleNotFoundError: No module named 'numpy'
+-- NumPy not found
+-- detecting Python 3.7...
+-- Python 3.7 wasn't found
+-- Copying /Users/feus/jetson-inference/utils/python/examples/camera-viewer.py
+-- Copying /Users/feus/jetson-inference/utils/python/examples/cuda-examples.py
+-- Copying /Users/feus/jetson-inference/utils/python/examples/cuda-from-cv.py
+-- Copying /Users/feus/jetson-inference/utils/python/examples/cuda-from-numpy.py
+-- Copying /Users/feus/jetson-inference/utils/python/examples/cuda-to-cv.py
+-- Copying /Users/feus/jetson-inference/utils/python/examples/cuda-to-numpy.py
+-- Copying /Users/feus/jetson-inference/utils/python/examples/gl-display-test.py
+-- Copying /Users/feus/jetson-inference/utils/python/examples/video-viewer.py
+CMake Error at CMakeLists.txt:190 (find_package):
+  By not providing "FindOpenCV.cmake" in CMAKE_MODULE_PATH this project has
+  asked CMake to find a package configuration file provided by "OpenCV", but
+  CMake did not find one.
+
+  Could not find a package configuration file provided by "OpenCV" with any
+  of the following names:
+
+    OpenCVConfig.cmake
+    opencv-config.cmake
+
+  Add the installation prefix of "OpenCV" to CMAKE_PREFIX_PATH or set
+  "OpenCV_DIR" to a directory containing one of the above files.  If "OpenCV"
+  provides a separate development package or SDK, be sure it has been
+  installed.
+
+
+-- Configuring incomplete, errors occurred!
+See also "/Users/feus/jetson-inference/cmake-build-debug/CMakeFiles/CMakeOutput.log".
+See also "/Users/feus/jetson-inference/cmake-build-debug/CMakeFiles/CMakeError.log".

@@ -1,0 +1,12 @@
+[Unit]
+Description=Uart Service
+After=multi.user.target
+
+[Service]
+Type=simple
+ExecStart=/bin/sh -c '/home/user/jetson-inference/dbict/script/serial.sh'
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+
