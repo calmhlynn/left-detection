@@ -113,7 +113,7 @@ int main(int argc, char **argv) {
     // init log & detected pic directory
     std::string log_dir_by_date = log_path + "/" + to_date();                 // ex) /home/user/detlog/300101
     std::string pic_dir_by_date = log_dir_by_date + "/pic";                  // ex) /home/user/detlog/300101/pic
-    std::string r_pic_dir_by_date = log_dir_by_date + "/badpic";            // ex) /home/user/detlog/300101/badpic
+    std::string b_pic_dir_by_date = log_dir_by_date + "/badpic";            // ex) /home/user/detlog/300101/badpic
 
 
 
@@ -122,7 +122,7 @@ int main(int argc, char **argv) {
     if (!fileExists(record_dir_by_date)) mkdir(record_dir_by_date.c_str(), 0777);
     if (!fileExists(log_dir_by_date)) mkdir(log_dir_by_date.c_str(), 0777);
     if (!fileExists(pic_dir_by_date)) mkdir(pic_dir_by_date.c_str(), 0777);
-    if (!fileExists(r_pic_dir_by_date)) mkdir(r_pic_dir_by_date.c_str(), 0777);
+    if (!fileExists(b_pic_dir_by_date)) mkdir(b_pic_dir_by_date.c_str(), 0777);
 
 
     std::string ctl_dir = "/home/user/jetson-inference/dbict/control/";
@@ -260,7 +260,7 @@ int main(int argc, char **argv) {
         std::string log_dir_by_date =
                 log_path + "/" + to_date();                                          // ex) /home/user/detlog/300101
         std::string pic_dir_by_date = log_dir_by_date + "/pic";                      // ex) /home/user/detlog/300101/pic
-        std::string r_pic_dir_by_date = log_dir_by_date + "/badpic";                 // ex) /home/user/detlog/300101/badpic
+        std::string b_pic_dir_by_date = log_dir_by_date + "/badpic";                 // ex) /home/user/detlog/300101/badpic
         std::string log_by_date = log_dir_by_date + "/" + to_hour() + "_log.txt";    // ex) /home/user/detlog/300101/00_log.txt
 
 
@@ -278,7 +278,7 @@ int main(int argc, char **argv) {
             mkdir(record_dir_by_date.c_str(), 0777);
             mkdir(log_dir_by_date.c_str(), 0777);
             mkdir(pic_dir_by_date.c_str(), 0777);
-            mkdir(r_pic_dir_by_date.c_str(), 0777);
+            mkdir(b_pic_dir_by_date.c_str(), 0777);
         }
 
         ///// create video every hours
@@ -338,8 +338,8 @@ int main(int argc, char **argv) {
 
         std::string str_stddev = to_string(int(stdDevValues[1]));
         int img_stddev = int(stdDevValues[1]);
-        std::string normal_pic = log_dir_by_date + "/" + return_current_time_and_date() + "_" + str_stddev + ".jpg";
-        std::string bad_pic = log_dir_by_date + "/" + return_current_time_and_date() + "_" + str_stddev + ".jpg";
+        std::string normal_pic = pic_dir_by_date + "/" + return_current_time_and_date() + "_" + str_stddev + ".jpg";
+        std::string bad_pic = b_pic_dir_by_date + "/" + return_current_time_and_date() + "_" + str_stddev + ".jpg";
 
 
         if (!fileExists(search_exec_proc)) system("mkdir /home/user/jetson-inference/dbict/control/run");
@@ -385,7 +385,7 @@ int main(int argc, char **argv) {
 
                         notDetect = 0;
 
-                        if (stdDevValues[1] > 20) {
+                        if (img_stddev > 20) {
                             cv::imwrite(normal_pic, det_img);
                         } else {
                             cv::imwrite(bad_pic, det_img);
