@@ -352,11 +352,7 @@ int main(int argc, char **argv) {
                           int(detections[n].Right - detections[n].Left), int(detections[n].Bottom - detections[n].Top));
                 std::string res;
 
-                int xCenter = rect.x + (rect.width / 2);
-                int yCenter = rect.y + (rect.height / 2);
-                int yBottom = rect.y + rect.height;
 
-                cv::line(cv_img, cv::Point(xCenter, yCenter), cv::Point(xCenter, yBottom), SCALAR_YELLOW, 2);
                 if (DoesROIOverlap(rect, RoiVtx, res)) {
                     cv::rectangle(cv_img, rect, SCALAR_BLUE, 2);
                     CarInWaitZone = true;
