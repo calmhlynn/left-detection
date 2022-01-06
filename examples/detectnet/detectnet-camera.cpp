@@ -237,9 +237,7 @@ int main(int argc, char **argv) {
 
         int times = atoi(to_time().c_str());
 
-        cv::Mat white_bg;
-
-        white_bg = imread("/home/user/jetson-inference/dbict/picture/white.jpg", IMREAD_COLOR);
+        cv::Mat white_bg = imread("/home/user/jetson-inference/dbict/picture/white.jpg", IMREAD_COLOR);
         if (white_bg.empty()) {
             cout << "could not open or find the image" << endl;
             return -1;
@@ -297,7 +295,7 @@ int main(int argc, char **argv) {
         }
 
 
-        c_region(region, mod);
+        c_region(region, mod); // changed region drew
         stddev_modify(std, stddev);
 
 
@@ -316,7 +314,7 @@ int main(int argc, char **argv) {
         const int numDetections = net->Detect(imgRGBA, camera->GetWidth(), camera->GetHeight(), &detections);
 
         cv::Mat cv_img = cv::Mat(camera->GetHeight(), camera->GetWidth(), CV_32FC4, imgRGBA);
-        cv::Mat det_img;
+
         cv::Mat last_img;
 
         cv_img.convertTo(cv_img, CV_8UC3);
@@ -324,6 +322,8 @@ int main(int argc, char **argv) {
         cv::cvtColor(cv_img, cv_img, COLOR_RGBA2BGR);
 
         meanStdDev(cv_img, meanValues, stdDevValues);
+
+        cv::Mat det_img = cv_img;
 
         float FPS = 1000.0f / net->GetNetworkTime();
 
@@ -509,4 +509,3 @@ int main(int argc, char **argv) {
     */
     return 0;
 }
-
