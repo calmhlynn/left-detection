@@ -6,3 +6,4 @@ dbict/control/url.txt
 logs/
 *.pyc
 *.tar.gz
+.idea
