@@ -36,14 +36,14 @@ uint64_t imagesProcessed[NUM_DEVICES];
 
 
 // exit handler
-bool signal_received = false;
+bool signal_recieved = false;
 
 void sig_handler(int signo)
 {
 	if( signo == SIGINT )
 	{
 		printf("received SIGINT\n");
-		signal_received = true;
+		signal_recieved = true;
 	}
 }
 
@@ -63,7 +63,7 @@ void* process( void* param )
 
 	printf("%s thread started\n", str);
 
-	while( !signal_received )
+	while( !signal_recieved )
 	{
 		if( !net->Process() )
 			printf("%s network failed to process\n", str);
@@ -216,7 +216,7 @@ int main( int argc, char** argv )
 	 */
 	timespec timeBegin = timestamp();
 
-	while( !signal_received )
+	while( !signal_recieved )
 	{
 		sleep(1);
 		

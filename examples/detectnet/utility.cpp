@@ -2,6 +2,9 @@
 
 extern std::vector<cv::Point> RoiVtx;
 
+extern int number_frame;
+extern int foggy_or_storm_frame;
+extern int normal_frame;
 
 void stddev_modify(const std::string &std, int &stddev) {
     if (fileExists(std)) {
@@ -97,4 +100,38 @@ void c_region(const std::string &region, const std::string &std_file){
         std::string rmdir_cli = "rmdir " + std_file;
         system(rmdir_cli.c_str());
     }
+}
+
+
+
+bool check_bad_weather(int img_stddev, int get_cfg_stddev, std::ofstream &log_file) {
+
+    if (img_stddev < get_cfg_stddev) {
+        foggy_or_storm_frame++;
+        normal_frame = 0;
+        if (foggy_or_storm_frame >= one_second * 2) {
+            normal_frame = 0;
+            if (foggy_or_storm_frame == one_second * 2) {
+                std::cout << "start bad weather:\t" << return_current_time_and_date() << "\tStdDev:\t"
+                          << img_stddev << endl;
+                log_file << "start bad weather:\t" << return_current_time_and_date() << "\tStdDev:\t"
+                         << img_stddev << endl;
+
+            }
+            return 1;
+        }
+    } else {
+        normal_frame++;
+        return 0;
+    }
+    if (foggy_or_storm_frame > one_second * 2 && normal_frame > one_second * 3) {
+        foggy_or_storm_frame = 0;
+        std::cout << "stop bad weather:\t" << return_current_time_and_date() << "\tStdDev:\t" << img_stddev
+                  << endl;
+        log_file << "stop bad weather:\t" << return_current_time_and_date() << "\tStdDev:\t" << img_stddev
+                 << endl;
+    }
+    if (foggy_or_storm_frame < one_second * 2 && normal_frame > one_second * 3) foggy_or_storm_frame = 0;
+
+    return 0;
 }

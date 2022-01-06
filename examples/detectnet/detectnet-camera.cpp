@@ -34,6 +34,12 @@ extern bool connect_socket;
 extern cv::Mat img;
 extern std::vector <cv::Point> RoiVtx;
 
+
+int number_frame = 0;
+int foggy_or_storm_frame = 0;
+int normal_frame = 0;
+
+
 extern string *StringSplit(string strOrigin, string strTok);
 
 bool signal_received = false;
@@ -70,43 +76,29 @@ int main(int argc, char **argv) {
      * parse command line
      */
 
+    std::string search_exec_proc = "/home/user/jetson-inference/dbict/control/run";
 
+    if (fileExists(search_exec_proc)) system("rmdir /home/user/jetson-inference/dbict/control/run");
 
     commandLine cmdLine(argc, argv);
 
     double fps_clock = 0;
     double duration = 0;
-    bool SendImageSocketData = false;
-    bool SocketSwitch = false;
 
-
-    unsigned char uart = 0;
+    bool uart = 0;
     unsigned char connect_LMB = 0;
     unsigned char connect_CAN = 0;
-//	int stddev = 0;
     int car_in = 0;
-    int detect_in = 0;
     int trueDetect = 0;
-    int totalframe = 0;
     int notDetect = 0;
+
     int empty = 0;
-    int number_frame = 0;
-    int foggy_or_storm_frame = 0;
-    int normal_frame = 0;
+
     int det_err = 0;
     int count = 0;
-    int sw_on = 0;
-    int sw_off = 0;
-    int one_second = 6;
+    bool bad_weather = 0;
 
 
-    int width = 320;
-    int height = 240;
-
-
-    char fName[100];
-    char gName[100];
-    char sys_rm[100];
 
 
     // init parent directory
@@ -114,17 +106,14 @@ int main(int argc, char **argv) {
     std::string log_path = "/home/user/detlog";
 
     // init record directory
-    std::string record_dir_by_date = record_path + "/" + to_date();                    // ex) /home/user/record/300101
-    std::string record_file_by_date =
-            record_dir_by_date + '/' + to_hour() + ".mp4";    // ex) /home/user/record/300101/00.mp4
+    std::string record_dir_by_date = record_path + "/" + to_date();                     // ex) /home/user/record/300101
+    std::string record_file_by_date = record_dir_by_date + '/' + to_hour() + ".mp4";    // ex) /home/user/record/300101/00.mp4
 
 
     // init log & detected pic directory
-    std::string log_dir_by_date = log_path + "/" + to_date();                          // ex) /home/user/detlog/300101
-    std::string pic_dir_by_date =
-            log_dir_by_date + "/_pic";                               // ex) /home/user/detlog/300101_pic
-    std::string r_pic_dir_by_date =
-            log_dir_by_date + "/_rainpic";                      // ex) /home/user/detlog/300101_rainpic
+    std::string log_dir_by_date = log_path + "/" + to_date();                 // ex) /home/user/detlog/300101
+    std::string pic_dir_by_date = log_dir_by_date + "/pic";                  // ex) /home/user/detlog/300101/pic
+    std::string r_pic_dir_by_date = log_dir_by_date + "/badpic";            // ex) /home/user/detlog/300101/badpic
 
 
 
@@ -224,13 +213,10 @@ int main(int argc, char **argv) {
      */
 
 
-    // search for previous execution
-    std::string search_prev_exec = "/home/user/jetson-inference/dbict/control/run";
 
 
-    if (!fileExists(search_prev_exec)) {
-        system("mkdir /home/user/jetson-inference/dbict/control/run");
-    }
+
+
 
     save_nextvideo(video, record_file_by_date, record_dir_by_date);
 
@@ -239,6 +225,8 @@ int main(int argc, char **argv) {
     test.start();
 
     while (!signal_received) {
+
+
         bool Object_Detection = 0;
         bool ForcedSignal = 0;
         bool ForcedNotSignal = 0;
@@ -264,22 +252,16 @@ int main(int argc, char **argv) {
         std::string log_path = "/home/user/detlog";
 
         // init record directory
-        std::string record_dir_by_date =
-                record_path + "/" + to_date();                    // ex) /home/user/record/300101
-        std::string record_file_by_date =
-                record_dir_by_date + '/' + to_hour() + ".mp4";    // ex) /home/user/record/300101/00.mp4
+        std::string record_dir_by_date = record_path + "/" + to_date();                     // ex) /home/user/record/300101
+        std::string record_file_by_date = record_dir_by_date + '/' + to_hour() + ".mp4";    // ex) /home/user/record/300101/00.mp4
 
 
         // init log & detected pic directory
         std::string log_dir_by_date =
-                log_path + "/" + to_date();                        // ex) /home/user/detlog/300101
-        std::string pic_dir_by_date =
-                log_dir_by_date + "/_pic";                         // ex) /home/user/detlog/300101_pic
-        std::string r_pic_dir_by_date =
-                log_dir_by_date + "/_rainpic";                     // ex) /home/user/detlog/300101_rainpic
-        std::string log_by_date =
-                log_dir_by_date + "/" + to_hour() + "_log.txt";    // ex) /home/user/detlog/300101/00_log.txt
-
+                log_path + "/" + to_date();                                          // ex) /home/user/detlog/300101
+        std::string pic_dir_by_date = log_dir_by_date + "/pic";                      // ex) /home/user/detlog/300101/pic
+        std::string r_pic_dir_by_date = log_dir_by_date + "/badpic";                 // ex) /home/user/detlog/300101/badpic
+        std::string log_by_date = log_dir_by_date + "/" + to_hour() + "_log.txt";    // ex) /home/user/detlog/300101/00_log.txt
 
 
         std::ofstream log_file;
@@ -319,8 +301,6 @@ int main(int argc, char **argv) {
         stddev_modify(std, stddev);
 
 
-        totalframe++;
-
         bool CarInWaitZone = false;
 
         // capture RGBA image
@@ -354,12 +334,15 @@ int main(int argc, char **argv) {
             signal_received = true;
         }
 
-        draw_ploygon(cv_img, RoiVtx, SCALAR_WHITE);
+        draw_polygon(cv_img, RoiVtx, SCALAR_WHITE);
 
         std::string str_stddev = to_string(int(stdDevValues[1]));
+        int img_stddev = int(stdDevValues[1]);
         std::string normal_pic = log_dir_by_date + "/" + return_current_time_and_date() + "_" + str_stddev + ".jpg";
         std::string bad_pic = log_dir_by_date + "/" + return_current_time_and_date() + "_" + str_stddev + ".jpg";
 
+
+        if (!fileExists(search_exec_proc)) system("mkdir /home/user/jetson-inference/dbict/control/run");
 
         if (numDetections > 0) {
             //printf("%i objects detected\n", numDetections);
@@ -369,6 +352,11 @@ int main(int argc, char **argv) {
                           int(detections[n].Right - detections[n].Left), int(detections[n].Bottom - detections[n].Top));
                 std::string res;
 
+                int xCenter = rect.x + (rect.width / 2);
+                int yCenter = rect.y + (rect.height / 2);
+                int yBottom = rect.y + rect.height;
+
+                cv::line(cv_img, cv::Point(xCenter, yCenter), cv::Point(xCenter, yBottom), SCALAR_YELLOW, 2);
                 if (DoesROIOverlap(rect, RoiVtx, res)) {
                     cv::rectangle(cv_img, rect, SCALAR_BLUE, 2);
                     CarInWaitZone = true;
@@ -387,11 +375,10 @@ int main(int argc, char **argv) {
 
 
                 if (trueDetect >= one_second * 3) {
-                    draw_ploygon(cv_img, RoiVtx, SCALAR_GREEN);
+                    draw_polygon(cv_img, RoiVtx, SCALAR_GREEN);
                     notDetect = 0;
                     uart = 1;
                     empty = 0;
-                    detect_in++;
                     if (trueDetect == one_second * 3) {
                         trueDetect += 1;
                         car_in++;
@@ -412,7 +399,7 @@ int main(int argc, char **argv) {
                 }
             } else {
                 notDetect++;
-                draw_ploygon(cv_img, RoiVtx, SCALAR_WHITE);
+                draw_polygon(cv_img, RoiVtx, SCALAR_WHITE);
             }
             if (uart && notDetect > one_second) {
                 trueDetect = 0;
@@ -437,44 +424,22 @@ int main(int argc, char **argv) {
             }
         }
 
-        if (stdDevValues[1] < stddev) {
-            foggy_or_storm_frame++;
-            normal_frame = 0;
-            if (foggy_or_storm_frame >= one_second * 2) {
-                normal_frame = 0;
-                uart = 1;
-                if (foggy_or_storm_frame == one_second * 2) {
-                    std::cout << "Start BAD weather:\t" << return_current_time_and_date() << "\tStdDev:\t"
-                              << stdDevValues[1] << endl;
-                    log_file << "Start BAD weather:\t" << return_current_time_and_date() << "\tStdDev:\t"
-                             << stdDevValues[1] << endl;
-                }
-            }
-        } else {
-            normal_frame++;
-        }
-        if (foggy_or_storm_frame > one_second * 2 && normal_frame > one_second * 3) {
-            foggy_or_storm_frame = 0;
-            uart = 0;
-            std::cout << "Stop BAD weather:\t" << return_current_time_and_date() << "\tStdDev:\t" << stdDevValues[1]
-                      << endl;
-            log_file << "Stop BAD weather:\t" << return_current_time_and_date() << "\tStdDev:\t" << stdDevValues[1]
-                     << endl;
-        }
-        if (foggy_or_storm_frame < one_second * 2 && normal_frame > one_second * 3) {
-            foggy_or_storm_frame = 0;
-        }
+        bad_weather = check_bad_weather(img_stddev, stddev, log_file);
 
+        if(bad_weather){
+            uart = 1;
+            draw_polygon(cv_img, RoiVtx, SCALAR_YELLOW);
+        }
 
         if (fileExists(uarton)) {
             uart = 1;
-            draw_ploygon(cv_img, RoiVtx, SCALAR_GREEN);
+            draw_polygon(cv_img, RoiVtx, SCALAR_GREEN);
             ForcedSignal = 1;
         }
 
         if (fileExists(uartoff)) {
             uart = 0;
-            draw_ploygon(cv_img, RoiVtx, SCALAR_RED);
+            draw_polygon(cv_img, RoiVtx, SCALAR_RED);
             ForcedNotSignal = 1;
         }
 
@@ -523,7 +488,7 @@ int main(int argc, char **argv) {
 
         duration = duration / cv::getTickFrequency();
         fps_clock = 1 / duration;
-        // cout << fps_clock << endl ;
+//         cout << fps_clock << endl ;
 #if 0
 #endif
 

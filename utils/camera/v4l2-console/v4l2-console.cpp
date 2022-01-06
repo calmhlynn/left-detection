@@ -27,14 +27,14 @@
 //#include <unistd.h>
 
 
-bool signal_received = false;
+bool signal_recieved = false;
 
 void sig_handler(int signo)
 {
 	if( signo == SIGINT )
 	{
 		printf("received SIGINT\n");
-		signal_received = true;
+		signal_recieved = true;
 	}
 }
 
@@ -96,7 +96,7 @@ int main( int argc, char** argv )
 	printf("\nv4l2-console:  camera '%s' open for streaming\n", dev_path);
 	
 	
-	while( !signal_received )
+	while( !signal_recieved )
 	{
 		uint8_t* img = (uint8_t*)camera->Capture(500);
 		

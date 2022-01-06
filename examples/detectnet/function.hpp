@@ -49,7 +49,7 @@ const int det_width = 320;  // detectnet program video width
 const int det_height = 265; // detectnet program video height
 
 const int save_video_fps = 30;
-
+const int one_second = 9;
 using namespace cv;
 using namespace std;
 
@@ -73,7 +73,7 @@ public :
 
     void setupSharedMemory( int size );
     void attachSharedMemory();
-    void copyToSharedMemory(unsigned int det_code);
+    void copyToSharedMemory(bool det_code);
 //   void close();
 };
 
@@ -95,7 +95,7 @@ std::string to_date();
 ///// Draw 
 
 extern bool DoesROIOverlap( cv::Rect rect,std::vector<cv::Point> ctr , std::string &res );
-void draw_ploygon(Mat src,std::vector<cv::Point> vertices, Scalar color);
+void draw_polygon(Mat src,std::vector<cv::Point> vertices, Scalar color);
 bool DoesROIOverlap( cv::Rect boundingbox,std::vector<cv::Point> contour, std::string &res);
 void onMouse(int event, int x, int y, int flags, void* userdata);
 void SendStatusValueInToPixel(Mat &image,std::vector<cv::Point> vertices, unsigned char detected, unsigned char LMB, unsigned char CAN, bool OnSignal, bool OffSignal, unsigned char StdDev);
@@ -110,3 +110,4 @@ void stddev_modify(const std::string &std, int &stddev);
 int get_stddev(const std::string &std_file);
 void save_nextvideo(cv::VideoWriter &video, const std::string &record_video_file, const std::string &record_dir_by_date);
 void c_region(const std::string &region, const std::string &std_file);
+bool check_bad_weather(int img_stddev, int get_cfg_stddev, std::ofstream &log_file);
