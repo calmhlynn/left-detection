@@ -27,14 +27,14 @@
 #include <signal.h>
 
 
-bool signal_received = false;
+bool signal_recieved = false;
 
 void sig_handler(int signo)
 {
 	if( signo == SIGINT )
 	{
 		printf("received SIGINT\n");
-		signal_received = true;
+		signal_recieved = true;
 	}
 }
 
@@ -89,7 +89,7 @@ int main( int argc, char** argv )
 	/*
 	 * processing loop
 	 */
-	while( !signal_received )
+	while( !signal_recieved )
 	{
 		// capture latest image
 		float* imgRGBA = NULL;
@@ -109,7 +109,7 @@ int main( int argc, char** argv )
 
 			// check if the user quit
 			if( display->IsClosed() )
-				signal_received = true;
+				signal_recieved = true;
 		}
 	}
 	

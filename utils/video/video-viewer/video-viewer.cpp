@@ -29,14 +29,14 @@
 #include <signal.h>
 
 
-bool signal_received = false;
+bool signal_recieved = false;
 
 void sig_handler(int signo)
 {
 	if( signo == SIGINT )
 	{
 		LogInfo("received SIGINT\n");
-		signal_received = true;
+		signal_recieved = true;
 	}
 }
 
@@ -100,7 +100,7 @@ int main( int argc, char** argv )
 	 */
 	uint32_t numFrames = 0;
 
-	while( !signal_received )
+	while( !signal_recieved )
 	{
 		uchar3* nextFrame = NULL;
 
@@ -109,7 +109,7 @@ int main( int argc, char** argv )
 			LogError("video-viewer:  failed to capture video frame\n");
 
 			if( !inputStream->IsStreaming() )
-				signal_received = true;
+				signal_recieved = true;
 
 			continue;
 		}
@@ -127,7 +127,7 @@ int main( int argc, char** argv )
 
 			// check if the user quit
 			if( !outputStream->IsStreaming() )
-				signal_received = true;
+				signal_recieved = true;
 		}
 	}
 

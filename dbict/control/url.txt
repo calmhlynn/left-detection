@@ -1,1 +1,1 @@
-http://localhost:8888/cam
+http://admin:dongbuict0@59.14.95.196:1080/streaming/channels/http/0

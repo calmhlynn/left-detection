@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 echo "make recoding forder"
-mkdir ${HOME}/data
 sudo dpkg-reconfigure dash
 sudo apt update
 sudo apt install openjdk-8-jdk -y
@@ -43,6 +42,7 @@ sudo systemctl enable producer
 
 
 /home/user/kafka_2.13-2.8.0/bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic control
+/home/user/kafka_2.13-2.8.0/bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic detect
 /home/user/kafka_2.13-2.8.0/bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic log
 
 

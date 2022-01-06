@@ -45,14 +45,14 @@
 #define GRID_WORLD_SIZE 10.0f
 
 
-bool signal_received = false;
+bool signal_recieved = false;
 
 void sig_handler(int signo)
 {
 	if( signo == SIGINT )
 	{
 		printf("received SIGINT\n");
-		signal_received = true;
+		signal_recieved = true;
 	}
 }
 
@@ -132,7 +132,7 @@ int main( int argc, char** argv )
 	/*
 	 * rendering loop
 	 */
-	while( !signal_received && display->IsOpen() )
+	while( !signal_recieved && display->IsOpen() )
 	{
 		display->BeginRender();
 
