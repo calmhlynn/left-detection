@@ -1,6 +1,8 @@
 build/
 data/networks/
 data/images/test
+dbict/control/region.txt
+dbict/control/url.txt
 logs/
 *.pyc
 *.tar.gz
