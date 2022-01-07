@@ -323,7 +323,7 @@ int main(int argc, char **argv) {
 
         meanStdDev(cv_img, meanValues, stdDevValues);
 
-        cv::Mat det_img = cv_img;
+        cv::Mat det_img = cv_img.clone();
 
         float FPS = 1000.0f / net->GetNetworkTime();
 
@@ -477,7 +477,8 @@ int main(int argc, char **argv) {
 
 
         cv::imshow("destination image", last_img);
-        video.write(last_img);
+//        video.write(last_img);
+        video.write(det_img);
         test.write(last_img);
 
         duration = static_cast<double>(cv::getTickCount()) - duration;
