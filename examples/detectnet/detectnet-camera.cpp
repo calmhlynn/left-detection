@@ -28,14 +28,8 @@ using namespace std;
 
 #define SIZE 1024
 
-/* Set up initialize */
 
-//// seconds to wating detection zone
-const int dzWaitSeconds = 3;
-
-//// seconds to leave out of zone
-const int dzLeaveSeconds = 1;
-
+// cv::Point ptOld;
 
 extern bool connect_socket;
 extern cv::Mat img;
@@ -105,8 +99,6 @@ int main(int argc, char **argv) {
 
     int det_err = 0;
     int count = 0;
-
-    bool init_cli_message = false;
     bool bad_weather = 0;
 
     bool logging = false;
@@ -267,15 +259,20 @@ int main(int argc, char **argv) {
         std::string log_path = "/home/user/detlog";
 
         // init record directory
-        std::string record_dir_by_date  = record_path + "/" + to_date();                     // ex) /home/user/record/300101
-        std::string record_file_by_date = record_dir_by_date + '/' + to_hour() + ".mp4";     // ex) /home/user/record/300101/00.mp4
+        std::string record_dir_by_date =
+                record_path + "/" + to_date();                     // ex) /home/user/record/300101
+        std::string record_file_by_date =
+                record_dir_by_date + '/' + to_hour() + ".mp4";    // ex) /home/user/record/300101/00.mp4
 
 
         // init log & detected pic directory
-        std::string log_dir_by_date = log_path + "/" + to_date();                            // ex) /home/user/detlog/300101
-        std::string pic_dir_by_date = log_dir_by_date + "/pic";                              // ex) /home/user/detlog/300101/pic
-        std::string b_pic_dir_by_date = log_dir_by_date + "/badpic";                         // ex) /home/user/detlog/300101/badpic
-        std::string log_by_date = log_dir_by_date + "/" + to_hour() + "_log.txt";            // ex) /home/user/detlog/300101/00_log.txt
+        std::string log_dir_by_date =
+                log_path + "/" + to_date();                                          // ex) /home/user/detlog/300101
+        std::string pic_dir_by_date = log_dir_by_date + "/pic";                      // ex) /home/user/detlog/300101/pic
+        std::string b_pic_dir_by_date =
+                log_dir_by_date + "/badpic";                 // ex) /home/user/detlog/300101/badpic
+        std::string log_by_date =
+                log_dir_by_date + "/" + to_hour() + "_log.txt";    // ex) /home/user/detlog/300101/00_log.txt
 
 
         std::ofstream log_file;
@@ -289,7 +286,6 @@ int main(int argc, char **argv) {
         if (!fileExists(record_dir_by_date)) {
             std::cout << "the current time is 00:00" << std::endl;
             std::cout << "change directory" << std::endl;
-            std::cout << "--------------------------------------------------------------------------------" << std::endl;
             mkdir(record_dir_by_date.c_str(), 0777);
             mkdir(log_dir_by_date.c_str(), 0777);
             mkdir(pic_dir_by_date.c_str(), 0777);
@@ -361,11 +357,6 @@ int main(int argc, char **argv) {
 
         if (!fileExists(search_exec_proc)) system("mkdir /home/user/jetson-inference/dbict/control/run");
 
-        if(!init_cli_message){
-            std::cout << "--------------------------------------------------------------------------------" << std::endl;
-            init_cli_message = true;
-        }
-
         if (numDetections > 0) {
             //printf("%i objects detected\n", numDetections);
 
@@ -389,7 +380,7 @@ int main(int argc, char **argv) {
                 detection.OnDetection();
                 detection.ResetOffDetection();
 
-                if (detection.OnSeconds() >= dzWaitSeconds) {
+                if (detection.OnSeconds() >= 3) {
                     uart = true;
 
                     draw_polygon(cv_img, RoiVtx, SCALAR_GREEN);
@@ -398,114 +389,117 @@ int main(int argc, char **argv) {
                     if (img_stddev > 20) cv::imwrite(normal_pic, det_img);
                     else cv::imwrite(bad_pic, det_img);
                 }
-            } else {
-
+            }
+            else {
                 draw_polygon(cv_img, RoiVtx, SCALAR_WHITE);
                 detection.OffDetection();
             }
 
-            /* object is out of zone.*/
-            if (detection.getOffDetect()) {
-                if (uart && detection.OffSeconds() > dzLeaveSeconds) {
+            if(detection.getOffDetect()) {
+                if (uart && detection.OffSeconds() > 1) {
                     detection.AllReset();
                     uart = 0;
+                    std::cout << "object is out of zone" << std::endl;
+
                 }
             }
-
-            /* erase the time that hasn't been erased*/
-            if (detection.getOnDetect() && detection.getOffDetect()) {
+            if (detection.getOnDetect() && detection.getOffDetect()){
                 if (detection.OnSeconds() < 3 && detection.OffSeconds() > 3) {
                     detection.AllReset();
                     uart = 0;
+                    std::cout << "clear" << std::endl;
                 }
             }
         }
-
         if (numDetections == 0) {
+
             detection.EmptyDetection();
             if (detection.EmptySeconds() > 1) {
                 detection.AllReset();
                 uart = 0;
+                std::cout << "empty all reset" << std::endl;
 
             }
         }
 
 
-        bad_weather = check_bad_weather(img_stddev, stddev, log_file);
+    bad_weather = check_bad_weather(img_stddev, stddev, log_file);
 
-        if (bad_weather) {
-            uart = 1;
-            draw_polygon(cv_img, RoiVtx, SCALAR_YELLOW);
-        }
+    if (bad_weather) {
+        uart = 1;
+        draw_polygon(cv_img, RoiVtx, SCALAR_YELLOW);
+    }
 
-        if (fileExists(uarton)) {
-            uart = 1;
-            draw_polygon(cv_img, RoiVtx, SCALAR_GREEN);
-            ForcedSignal = 1;
-        }
+    if (fileExists(uarton)) {
+        uart = 1;
+        draw_polygon(cv_img, RoiVtx, SCALAR_GREEN);
+        ForcedSignal = 1;
+    }
 
-        if (fileExists(uartoff)) {
-            uart = 0;
-            draw_polygon(cv_img, RoiVtx, SCALAR_RED);
-            ForcedNotSignal = 1;
-        }
-
-        /* draw the datetime and report information*/
-        std::ostringstream out;
-        out.str("");
-        out << fixed;
-        out.precision(2);
-        out << current_datetime();
-        out << " Std:" << stdDevValues[1];
-        if (fileExists(canerr)) {
-            out << "  CAN: X";
-            connect_CAN = 0;
-        } else {
-            out << "  CAN: O";
-            connect_CAN = 1;
-        }
-        if (fileExists(lmberr)) {
-            out << "  LMB: X";
-            connect_LMB = 0;
-        } else {
-            out << "  LMB: O";
-            connect_LMB = 1;
-        }
-        cv::putText(white_bg, out.str(), cv::Point2f(5, 16), cv::FONT_HERSHEY_COMPLEX, 0.42, cv::Scalar(0, 0, 0));
-
-        /* send result data to shared memory*/
-        m.copyToSharedMemory(uart);
+    if (fileExists(uartoff)) {
+        uart = 0;
+        draw_polygon(cv_img, RoiVtx, SCALAR_RED);
+        ForcedNotSignal = 1;
+    }
 
 
-        cv::vconcat(white_bg, cv_img, last_img);
+    std::ostringstream out;
+    out.str("");
 
-        /* draw the pixel meta data*/
-        line(last_img, Point(0, 0), Point(320, 0), cv::Scalar(0, 0, 0), 1);
-        SendStatusValueInToPixel(last_img, RoiVtx, uart, connect_LMB, connect_CAN, ForcedSignal, ForcedNotSignal, stddev);
+    out << fixed;
+    out.precision(2);
+
+    out << current_datetime();
+
+    out << " Std:" << stdDevValues[1];
+
+    if (fileExists(canerr)) {
+        out << "  CAN: X";
+        connect_CAN = 0;
+    } else {
+        out << "  CAN: O";
+        connect_CAN = 1;
+    }
+    if (fileExists(lmberr)) {
+        out << "  LMB: X";
+        connect_LMB = 0;
+    } else {
+        out << "  LMB: O";
+        connect_LMB = 1;
+    }
+    cv::putText(white_bg, out.str(), cv::Point2f(5, 16), cv::FONT_HERSHEY_COMPLEX, 0.42, cv::Scalar(0, 0, 0));
 
 
-        cv::imshow("destination image", last_img);
+    m.copyToSharedMemory(uart);
 
-        video.write(last_img);
-//        video.write(det_img);
-        test.write(last_img);
+    cv::vconcat(white_bg, cv_img, last_img);
+
+    line(last_img, Point(0, 0), Point(320, 0), cv::Scalar(0, 0, 0), 1);
+    SendStatusValueInToPixel(last_img, RoiVtx, uart, connect_LMB, connect_CAN, ForcedSignal, ForcedNotSignal,
+                             stddev);
 
 
-        duration = static_cast<double>(cv::getTickCount()) - duration;
-        duration = duration / cv::getTickFrequency();
-        fps_clock = 1 / duration;
-//        std::cout << "FPS: " << fps_clock << endl;
+    cv::imshow("destination image", last_img);
+//        video.write(last_img);
+    video.write(det_img);
+    test.write(last_img);
+
+    duration = static_cast<double>(cv::getTickCount()) - duration;
+
+    duration = duration / cv::getTickFrequency();
+    fps_clock = 1 / duration;
+//         cout << fps_clock << endl ;
 #if 0
 #endif
 
 
 
-        // print out timing info
-        //net->PrintProfilerTimes();
+    // print out timing info
+    //net->PrintProfilerTimes();
 
 
 
-    }
+}
 /*
 destroy resources
 
@@ -517,5 +511,5 @@ SAFE_DELETE(net);
 
 printf("detectnet-camera:  shutdown complete.\n");
 */
-    return 0;
+return 0;
 }
