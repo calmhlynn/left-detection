@@ -84,7 +84,7 @@ public :
 ///Time
 
 
-std::string return_current_time_and_date();
+std::string current_datetime();
 std::string to_hour();
 std::string to_time();
 std::string to_date();

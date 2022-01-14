@@ -1,0 +1,11 @@
+alias url="vi /home/user/jetson-inference/dbict/control/url.txt"
+alias start="sh /home/user/jetson-inference/dbict/script/start.sh"
+alias delete="echo '123' | sudo -S rm  /home/user/jetson-inference/dbict/control/region.txt"
+alias go="cd /home/user/jetson-inference/build"
+
+alias oo="mkdir /home/user/jetson-inference/dbict/control/uarton"
+alias ox="rmdir /home/user/jetson-inference/dbict/control/uarton"
+alias xo="mkdir /home/user/jetson-inference/dbict/control/uartoff"
+alias xx="rmdir /home/user/jetson-inference/dbict/control/uartoff"
+
+echo "123" | sudo -S sh /home/user/jetson-inference/dbict/script/start.sh
