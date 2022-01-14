@@ -136,7 +136,7 @@ bool gstCamera::buildLaunchStr()
 	std::string get_url;
 	getline(url, get_url);
 
- ss << "souphttpsrc location=" << get_url << " ! queue ! jpegdec ! videoconvert ! appsink name=mysink";
+ ss << "souphttpsrc location=" << get_url << " ! queue ! jpegdec ! videoscale ! video/x-raw, width=640, height=480 ! videoconvert ! appsink name=mysink";
 	
 //	ss << "v4l2src device=" << get_url << " ! videoconvert ! video/x-raw,format=(string)YUY2 ! appsink name=mysink";
 

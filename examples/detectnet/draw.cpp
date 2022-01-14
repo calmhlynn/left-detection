@@ -7,30 +7,21 @@ std::vector <cv::Point> RoiVtx;
 void SendStatusValueInToPixel(Mat &image, std::vector <cv::Point> vertices, unsigned char detected, unsigned char LMB,
                               unsigned char CAN, bool OnSignal, bool OffSignal, unsigned char StdDev) {
 
-    image.at<Vec3b>(0,
-                    0)[0] = detected; // Detected Left Turn Signal                    // Blue in BGR  -> [0,0] point pixel
-    image.at<Vec3b>(0,
-                    0)[1] = LMB;       // On or Off LMB                                // Green in BGR -> [0,0] point pixel
-    image.at<Vec3b>(0,
-                    0)[2] = CAN;      // On or Off CAN                                // Red in BGR   -> [0,0] point pixel
+    image.at<Vec3b>(0,0)[0] = detected; // Detected Left Turn Signal                    // Blue in BGR  -> [0,0] point pixel
+    image.at<Vec3b>(0,0)[1] = LMB;      // On or Off LMB                                // Green in BGR -> [0,0] point pixel
+    image.at<Vec3b>(0,0)[2] = CAN;      // On or Off CAN                                // Red in BGR   -> [0,0] point pixel
 
     /*
      *  Forced On or Off Detect Signal                                                  // Blue in BGR  -> [0,1] point pixel
      */
 
-    if (!OnSignal && !OffSignal) {
-        image.at<Vec3b>(0, 1)[0] = 0;
-    } else if (OnSignal && !OffSignal) {
-        image.at<Vec3b>(0, 1)[0] = 1;
-    } else {
-        image.at<Vec3b>(0, 1)[0] = 2;
-    }
+    if (!OnSignal && !OffSignal)        image.at<Vec3b>(0, 1)[0] = 0;
+    else if (OnSignal && !OffSignal)    image.at<Vec3b>(0, 1)[0] = 1;
+    else                                image.at<Vec3b>(0, 1)[0] = 2;
 
 
-    image.at<Vec3b>(0,
-                    1)[1] = StdDev;                                                   // Green in BGR -> [0,1] point pixel
-    image.at<Vec3b>(0,
-                    1)[2] = 0;                                                        // Blue in BGR  -> [0,1] point pixel
+    image.at<Vec3b>(0,1)[1] = StdDev;                                                   // Green in BGR -> [0,1] point pixel
+    image.at<Vec3b>(0,1)[2] = 0;                                                        // Blue in BGR  -> [0,1] point pixel
 
     image.at<Vec3b>(0, 2)[0] = 0;
     image.at<Vec3b>(0, 2)[1] = 0;
@@ -42,7 +33,6 @@ void SendStatusValueInToPixel(Mat &image, std::vector <cv::Point> vertices, unsi
     image.at<Vec3b>(0, 3)[2] = 0;
 
     for (int i = 0; i <= vertices.size(); i++) {
-
         if (vertices[i].x > 100) {
             image.at<Vec3b>(0, i * 2 + 10)[0] = vertices[i].x / 100;
             image.at<Vec3b>(0, i * 2 + 10)[1] = (vertices[i].x % 100) / 10;
@@ -184,6 +174,7 @@ void draw_region(const std::string &region) {
 
 
             cv::waitKey(1);
+            cv::resize(img, img, cv::Size(640, 480), 1);
             cv::setMouseCallback(winname, onMouse, NULL);
             draw_polygon(img, RoiVtx, SCALAR_WHITE);
 
