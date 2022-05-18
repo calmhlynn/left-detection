@@ -80,6 +80,15 @@ void draw_polygon(Mat src, std::vector <cv::Point> vertices, Scalar color) {
     }
 }
 
+/**
+ * @var bottom_ptr: bounding box의 하단 중앙의 위치를 저장
+ * @var point_in_box
+ *  @fn pointPolygonTest 해당 좌표가 contourArea 어디에 위치했는지 계산하는 메서드
+ *   @param contour: 검지영역
+ *   @param cv::Point: 특정좌표, 해당 로직에서는 하단 중앙의 좌표인 bottom_ptr이다.
+ *   @param measureDist: true는 좌표와 경계선까지의 거리를 계산하고, false면 안에 있는지 바깥에 있는지만 확인한다.
+ *  @return 경계선까지의 거리를 계산, 양수면 검지영역의 안에 위치하며, 음수면 바깥쪽에 위치하게 된다.
+ */
 bool DoesROIOverlap(cv::Rect boundingbox, std::vector <cv::Point> contour, std::string &res) {
 
     //Get the corner points.
@@ -95,7 +104,6 @@ bool DoesROIOverlap(cv::Rect boundingbox, std::vector <cv::Point> contour, std::
     cv::Point bottom_ptr = cv::Point(xCenter, yBottom);
 
     float AR = (float) boundingbox.width / (float) boundingbox.height;
-
 
     int point_in_box = pointPolygonTest(Mat(contour), bottom_ptr, true); // if point_in_box > 0 true else false
 
@@ -117,9 +125,12 @@ bool DoesROIOverlap(cv::Rect boundingbox, std::vector <cv::Point> contour, std::
     }
     int ratio = 100 * IntersectionArea / boundingbox.area();
 
-    if (boundingbox.area() > C_area * 0.8 && point_in_box > 0) { if (ratio > 20) { return 1; }} // detected big size vehicle
-    else if (ratio > 30 && point_in_box > 0) { return 1; } // detected normal size vehicle
-    else { return 0; } // not detected
+    /// @example boundingbox의 크기가 검지영역의 0.8배보다 크면서 boundingbox가 검지영역에 20%이상 점유하면 감응신호 true; 큰 객체 검출
+    if (boundingbox.area() > C_area * 0.8 && point_in_box > 0) { if (ratio > 20) { return 1; }}
+
+        /// @example boundingbox가 검지영역에 30%이상 점유하면 감응 신호 true
+    else if (ratio > 30 && point_in_box > 0) { return 1; }
+    else { return 0; }
 }
 
 void onMouse(int event, int x, int y, int flags, void *userdata) {
@@ -174,6 +185,7 @@ void draw_region(const std::string &region) {
 
 
             cv::waitKey(1);
+            cv::resize(img, img, cv::Size(640, 480), 1);
             cv::setMouseCallback(winname, onMouse, NULL);
             draw_polygon(img, RoiVtx, SCALAR_WHITE);
 
