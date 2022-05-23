@@ -1,13 +1,11 @@
-import serial
-import time
-import sysv_ipc
-import sys
-import datetime
 import os
+import serial
+import sys
+import sysv_ipc
+import time
+
 
 class CAN_Serial :
-    
-
     def __init__(self, shm, ser, inactive, chk, ser_fail, err, lmb_active) :
 
         self.shm = shm
@@ -170,7 +168,6 @@ ser = serial.Serial("/dev/ttyTHS1", baudrate=115200, timeout = 1)
 if ser.isOpen() == False:
     ser.open()
 
-
 shm = sysv_ipc.SharedMemory(0x1000, flags = sysv_ipc.IPC_CREAT, size = 256)
 
 
@@ -179,13 +176,8 @@ uart = CAN_Serial(shm, ser, inactive, chk, ser_fail, err, lmb_active)
 
 
 
-
 while True:
     try:
-        now = datetime.datetime.now()
-        nowDatetime = now.strftime('%Y-%m-%d %H:%M:%S')
-
-
         memory = bytearray(shm.read())
 
         chkcode = uart.program_chk(memory, next_cnt) ## Error check
