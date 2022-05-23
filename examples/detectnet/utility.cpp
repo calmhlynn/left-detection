@@ -2,9 +2,9 @@
 
 extern std::vector<cv::Point> RoiVtx;
 
-extern int number_frame;
-extern int foggy_or_storm_frame;
-extern int normal_frame;
+int number_frame;
+int foggy_or_storm_frame;
+int normal_frame;
 
 void stddev_modify(const std::string &std, int &stddev) {
     if (fileExists(std)) {

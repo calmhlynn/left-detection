@@ -551,7 +551,7 @@ int main(int argc, char **argv) {
                  *                      해당시간 이상지났으면 검지신호(uart)를 미감응상태(uart=false)로 변경한다. 기본 값은 1(초)
                  * @fn AllReset: 모든 검지상태를 초기화한다.
                  */
-                if (uart && de간ection.OffSeconds() > dzLeaveSeconds) {
+                if (uart && detection.OffSeconds() > dzLeaveSeconds) {
                     detection.AllReset();
                     uart = false;
                 }

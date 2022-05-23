@@ -185,7 +185,6 @@ void draw_region(const std::string &region) {
 
 
             cv::waitKey(1);
-            cv::resize(img, img, cv::Size(640, 480), 1);
             cv::setMouseCallback(winname, onMouse, NULL);
             draw_polygon(img, RoiVtx, SCALAR_WHITE);
 
