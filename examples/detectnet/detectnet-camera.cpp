@@ -303,6 +303,8 @@ int main(int argc, char **argv) {
 
     while (!signal_received) {
 
+
+        /// 프레임 카운트
         total_frame++;
 
         /**
@@ -642,7 +644,7 @@ int main(int argc, char **argv) {
 
 
         /// @example 감응신호 여부를 SharedMemory에 write
-        m.copyToSharedMemory(uart);
+        m.copyToSharedMemory(total_frame, uart);
 
         cv::resize(cv_img, cv_img, cv::Size(320, 240), 1);
 
