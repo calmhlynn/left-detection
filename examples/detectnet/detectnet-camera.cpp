@@ -101,9 +101,11 @@ int main(int argc, char **argv) {
     /**
      * @var uart:
      * @example 실제 감응 신호를 보내는 변수, 미감응 0, 감응 1
+     * @var total_frame: 프레임 카운트
      */
 
     bool uart = 0;
+    unsigned int total_frame = 0;
 
 
     /**
@@ -301,6 +303,7 @@ int main(int argc, char **argv) {
 
     while (!signal_received) {
 
+        total_frame++;
 
         /**
          * @var ForcedSignal: 강제 감응 신호가 작동하는지 확인하는 변수

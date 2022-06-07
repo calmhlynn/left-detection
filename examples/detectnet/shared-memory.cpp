@@ -29,10 +29,13 @@ void CSharedMemory::attachSharedMemory() {
 }
 
 
-void CSharedMemory::copyToSharedMemory(bool det_code) {
-    bool *det_code_ptr = &det_code;
+void CSharedMemory::copyToSharedMemory(unsigned int frame_count, bool det_code) {
+    unsigned int value[2] = {0, 0};
+
+    value = &frame_count;
+    value = &det_code;
     // copy string to shared memory
-    memcpy(*m_shared_memory, det_code_ptr, 1);
+    memcpy(*m_shared_memory, value, 2);
 //    sleep( 10 );
 }
 
