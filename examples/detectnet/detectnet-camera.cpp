@@ -528,7 +528,7 @@ int main(int argc, char **argv) {
                  * @example 점유시간(OnSeconds)이 최소점유대기시간(dzWaitSeconds)를 넘어가면 검지신호(uart)를 감응상태(uart=true)로 변경한다.
                  */
                 if (detection.OnSeconds() >= dzWaitSeconds) {
-                    uart = true;
+                    uart = 1;
 
                     draw_polygon(cv_img, RoiVtx, SCALAR_GREEN);
 
@@ -558,7 +558,7 @@ int main(int argc, char **argv) {
                  */
                 if (uart && detection.OffSeconds() > dzLeaveSeconds) {
                     detection.AllReset();
-                    uart = false;
+                    uart = 0;
                 }
             }
 
@@ -570,7 +570,7 @@ int main(int argc, char **argv) {
             if (detection.getOnDetect() && detection.getOffDetect()) {
                 if (detection.OnSeconds() < 3 && detection.OffSeconds() > 3) {
                     detection.AllReset();
-                    uart = false;
+                    uart = 0;
                 }
             }
         }
@@ -585,7 +585,7 @@ int main(int argc, char **argv) {
             detection.EmptyDetection();
             if (detection.EmptySeconds() > 1) {
                 detection.AllReset();
-                uart = false;
+                uart = 0;
 
             }
         }
@@ -597,20 +597,20 @@ int main(int argc, char **argv) {
          *  @param log_file: 강제감응신호 발생을 로깅하는 파일
          */
         if (check_bad_weather(img_stddev, stddev, log_file)) {
-            uart = true;
+            uart = 1;
             draw_polygon(cv_img, RoiVtx, SCALAR_YELLOW);
         }
 
         /// @example 강제감응 신호를 요청하는 폴더가 존재하는 경우 강제감응 발생
         if (fileExists(uarton)) {
-            uart = true;
+            uart = 1;
             draw_polygon(cv_img, RoiVtx, SCALAR_GREEN);
             ForcedSignal = 1;
         }
 
         /// @example 강제미감응 신호를 요청하는 폴더가 존재하는 경우 강제미감응 발생
         if (fileExists(uartoff)) {
-            uart = true;
+            uart = 1;
             draw_polygon(cv_img, RoiVtx, SCALAR_RED);
             ForcedNotSignal = 1;
         }
