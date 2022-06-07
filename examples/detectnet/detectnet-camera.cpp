@@ -138,10 +138,10 @@ int main(int argc, char **argv) {
     std::string record_path = "/home/user/record";
     std::string log_path = "/home/user/detlog";
     std::string record_dir_by_date = record_path + "/" + to_date();
-    std::string record_file_by_date = record_dir_by_date + '/' + to_hour() + ".mp4";    // ex) /home/user/record/300101/00.mp4
-    std::string log_dir_by_date = log_path + "/" + to_date();                 // ex) /home/user/detlog/300101
-    std::string pic_dir_by_date = log_dir_by_date + "/pic";                  // ex) /home/user/detlog/300101/pic
-    std::string b_pic_dir_by_date = log_dir_by_date + "/badpic";            // ex) /home/user/detlog/300101/badpic
+    std::string record_file_by_date = record_dir_by_date + '/' + to_hour() + ".mp4";
+    std::string log_dir_by_date = log_path + "/" + to_date();
+    std::string pic_dir_by_date = log_dir_by_date + "/pic";
+    std::string b_pic_dir_by_date = log_dir_by_date + "/badpic";
 
 
 
@@ -585,7 +585,7 @@ int main(int argc, char **argv) {
             detection.EmptyDetection();
             if (detection.EmptySeconds() > 1) {
                 detection.AllReset();
-                uart = 0;
+                uart = false;
 
             }
         }
@@ -597,20 +597,20 @@ int main(int argc, char **argv) {
          *  @param log_file: 강제감응신호 발생을 로깅하는 파일
          */
         if (check_bad_weather(img_stddev, stddev, log_file)) {
-            uart = 1;
+            uart = true;
             draw_polygon(cv_img, RoiVtx, SCALAR_YELLOW);
         }
 
         /// @example 강제감응 신호를 요청하는 폴더가 존재하는 경우 강제감응 발생
         if (fileExists(uarton)) {
-            uart = 1;
+            uart = true;
             draw_polygon(cv_img, RoiVtx, SCALAR_GREEN);
             ForcedSignal = 1;
         }
 
         /// @example 강제미감응 신호를 요청하는 폴더가 존재하는 경우 강제미감응 발생
         if (fileExists(uartoff)) {
-            uart = 0;
+            uart = true;
             draw_polygon(cv_img, RoiVtx, SCALAR_RED);
             ForcedNotSignal = 1;
         }
@@ -642,6 +642,9 @@ int main(int argc, char **argv) {
         }
         cv::putText(white_bg, out.str(), cv::Point2f(5, 16), cv::FONT_HERSHEY_COMPLEX, 0.42, cv::Scalar(0, 0, 0));
 
+
+        /// @example 프레임 초기화
+        if(total_frame == 255) total_frame = 0;
 
         /// @example 감응신호 여부를 SharedMemory에 write
         m.copyToSharedMemory(total_frame, uart);
