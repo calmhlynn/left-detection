@@ -73,7 +73,7 @@ public :
 
     void setupSharedMemory( int size );
     void attachSharedMemory();
-    void copyToSharedMemory(unsigned int frame_count, unsigned int det_code);
+    void copyToSharedMemory(unsigned char frame_count, unsigned char det_code);
 //   void close();
 };
 

@@ -29,7 +29,7 @@ void CSharedMemory::attachSharedMemory() {
 }
 
 
-void CSharedMemory::copyToSharedMemory(unsigned int frame_count, unsigned int det_code) {
+void CSharedMemory::copyToSharedMemory(unsigned char frame_count, unsigned char det_code) {
     unsigned int value[2] = {0, 0};
 
     value[0] = frame_count;

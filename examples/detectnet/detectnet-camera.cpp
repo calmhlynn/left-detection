@@ -104,8 +104,8 @@ int main(int argc, char **argv) {
      * @var total_frame: 프레임 카운트
      */
 
-    unsigned int uart = 0;
-    unsigned int total_frame = 0;
+    unsigned char uart = 0;
+    unsigned char total_frame = 0;
 
 
     /**
